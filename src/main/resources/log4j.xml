@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="target" value="System.out"/>
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+        </layout>
+    </appender>
+
+    <root>
+        <level value="info" />
+        <appender-ref ref="console" />
+    </root>
+
+<!--    <appender name="file" class="org.apache.log4j.RollingFileAppender">-->
+<!--        -->
+<!--        <param name="file" value="hibernate-starter.log"/>-->
+
+<!--        <param name="append" value="true" />-->
+<!--        <param name="maxFileSize" value="10KB" />-->
+<!--        <param name="maxBackupIndex" value="5" />-->
+<!--        &lt;!&ndash; For Tomcat &ndash;&gt;-->
+<!--&lt;!&ndash;        <param name="file" value="${catalina.home}/logs/myStruts1App.log" />&ndash;&gt;-->
+<!--        <layout class="org.apache.log4j.PatternLayout">-->
+<!--            <param name="ConversionPattern"-->
+<!--                   value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />-->
+<!--        </layout>-->
+
+
+<!--    <filter class="org.apache.log4j.varia.LevelMatchFilter">-->
+<!--        <param name="LevelToMatch" value="ALL" />-->
+<!--        <param name="AcceptOnMatch" value="true" />-->
+<!--    </filter>-->
+<!--    </appender>-->
+    
+<!--    <logger name="com.vmdev" additivity="false">-->
+<!--        <level value="info"/>-->
+<!--        <appender-ref ref="console" />-->
+<!--    </logger>-->
+
+<!--    <root>-->
+<!--        <level value="info" />-->
+<!--        <appender-ref ref="console" />-->
+<!--        <appender-ref ref="file" />-->
+<!--    </root>-->
+
+</log4j:configuration>
