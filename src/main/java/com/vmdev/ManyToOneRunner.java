@@ -13,19 +13,18 @@ import java.time.LocalDate;
 @Slf4j
 public class ManyToOneRunner {
     public static void main(String[] args) {
-        Company company = Company.builder()
-                .name("Sa2")
-                .build();
+//        Company company = Company.builder()
+//                .name("Sa2")
+//                .build();
 
 
         User user = User.builder()
-                .username("nikId5@gmail.com")
+                .username("nikId7@gmail.com")
                 .personalInfo(PersonalInfo.builder()
-                        .firstname("Vik22")
+                        .firstname("Rick")
                         .lastname("EmbeddedId")
                         .birthDate(new BirthDay(LocalDate.of(1995, 05, 10)))
                         .build())
-                .company( company )
                 .build();
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
@@ -33,11 +32,11 @@ public class ManyToOneRunner {
             try (session1) {
                 Transaction transaction = session1.beginTransaction();
 
-                session1.get(User.class, 3L);
-                Company company1 = user.getCompany();
-                String name = company1.getName();
+                Company company2 = session1.get(Company.class, 3);
+                company2.addUser(user);
+
 //                session1.persist(company);
-                session1.persist(user);
+                session1.persist(company2);
 //                Object object = Hibernate.unproxy(company1);
 
                 session1.getTransaction().commit();

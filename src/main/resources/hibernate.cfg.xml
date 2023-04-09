@@ -14,6 +14,9 @@
 
     <mapping class="com.vmdev.entity.User"/>
     <mapping class="com.vmdev.entity.Company"/>
+    <mapping class="com.vmdev.entity.Profile"/>
+    <mapping class="com.vmdev.entity.Chat"/>
+    <mapping class="com.vmdev.entity.UserChat"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
   </session-factory>

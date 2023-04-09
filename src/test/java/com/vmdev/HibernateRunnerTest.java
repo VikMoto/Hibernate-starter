@@ -1,8 +1,6 @@
 package com.vmdev;
 
-import com.vmdev.entity.BirthDay;
-import com.vmdev.entity.Company;
-import com.vmdev.entity.User;
+import com.vmdev.entity.*;
 import com.vmdev.util.HibernateUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
@@ -18,13 +16,153 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.Set;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 
 class HibernateRunnerTest {
+
+
+    @Test
+    void checkLocaleInfo() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            Company company = session.get(Company.class, 3L);
+
+//            company.getLocales().add(LocaleInfo.of("ua", "Опис українскою"));
+//            company.getLocales().add(LocaleInfo.of("en", "English description"));
+
+            System.out.println("company.getLocales() = " + company.getLocales());
+
+//            session.persist(company);
+
+
+            System.out.println();
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkOneToMany() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            User user = session.get(User.class, 10L);
+            Chat chat = session.get(Chat.class, 1L);
+
+            UserChat userChat = UserChat.builder()
+                    .createdAt(Instant.now())
+                    .createdBy(user.getUsername())
+                    .build();
+
+            userChat.setChat(chat);
+            userChat.setUser(user);
+
+            session.persist(userChat);
+//            Chat chat = Chat.builder()
+//                    .name("Ginger")
+//                    .build();
+//
+//            user.addChat(chat);
+//            session.persist(chat);
+
+            System.out.println();
+
+            session.getTransaction().commit();
+        }
+    }
+
+//    @Test
+//    void checkManyToMany() {
+//        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+//             Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//
+//            User user = session.get(User.class, 10L);
+//            user.getChats().clear();
+//
+////            Chat chat = Chat.builder()
+////                    .name("Ginger")
+////                    .build();
+////
+////            user.addChat(chat);
+////            session.persist(chat);
+//
+//            System.out.println();
+//
+//            session.getTransaction().commit();
+//        }
+//    }
+    @Test
+    void checkOneToOne() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+//            User user = session.get(User.class, 13L);
+
+            User user1 = User.builder()
+                    .username("test4@gmail.com")
+                    .build();
+
+            Profile profile = Profile.builder()
+                    .language("UA")
+                    .street("Franko 14")
+                    .build();
+            profile.setUser(user1);
+
+            session.persist(user1);
+//            session.persist(profile);
+
+            System.out.println();
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkOrhanRemoval() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            Company company = session.getReference(Company.class, 3L);
+            company.getUsers().removeIf(user -> user.getId().equals(12L));
+
+            System.out.println();
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkLazyInitialisation() {
+        Company company = null;
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            company = session.get(Company.class, 3L);
+
+            System.out.println();
+
+            session.getTransaction().commit();
+        }
+
+        Set<User> users = company.getUsers();
+        for (User user : users) {
+            System.out.println("user = " + user);
+        }
+    }
+
 
     @Test
     void deleteCompany() {
